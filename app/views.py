@@ -1,6 +1,8 @@
 import math
 
-from django.shortcuts import render
+from app.models import Tag, Profile, Question, Answer
+
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 
 TAGS = [
@@ -60,7 +62,7 @@ def paginate(objects, request, per_page=3):
 
 # Create your views here.
 def index(request):
-    params, page, prev, fol, pages_number = paginate(QUESTIONS, request, 4)
+    params, page, prev, fol, pages_number = paginate(Question.objects.all(), request, 4)
     return render(request, 'index.html',
                   {'questions': params, 'page': page, 'prev': prev, 'fol': fol, 'pages_number': pages_number,
                    'tags': TAGS})
@@ -71,7 +73,7 @@ def ask(request):
 
 
 def hot(request):
-    params, page, prev, fol, pages_number = paginate(QUESTIONS, request, 4)
+    params, page, prev, fol, pages_number = paginate(Question.objects.all(), request, 4)
     return render(request, 'hot.html',
                   {'questions': params, 'page': page, 'prev': prev, 'fol': fol, 'pages_number': pages_number,
                    'tags': TAGS})
@@ -82,8 +84,8 @@ def login(requset):
 
 
 def question(request, question_id):
-    item = QUESTIONS[question_id]
-    params, page, prev, fol, pages_number = paginate(ANSWERS, request)
+    item = Question.objects.all()[question_id - 1]
+    params, page, prev, fol, pages_number = paginate(Answer.objects.filter(question=item), request)
     return render(request, 'question.html', {'question': item,
                                              'answers': params, 'page': page, 'prev': prev, 'fol': fol,
                                              'pages_number': pages_number, 'tags': TAGS})
@@ -98,7 +100,8 @@ def signup(request):
 
 
 def tag(request, tag_name):
-    items = search_questions_for_tag(QUESTIONS, tag_name)
+    tagg = get_object_or_404(Tag, name=tag_name)
+    items = Question.objects.filter(tags__in=[tagg])
     params, page, prev, fol, pages_number = paginate(items, request, 2)
 
     return render(request, 'tag.html', {'tag': tag_name, 'questions': params, 'page': page, 'prev': prev, 'fol': fol,

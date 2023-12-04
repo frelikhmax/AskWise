@@ -2,6 +2,14 @@
 
 {% block content %}
 
+<div class="row">
+    <div class="col-7">
+    </div>
+    <div class="col-5">
+        <h4 class="hot-questions-title"><a href="{% url 'hot' %}">hot questions</a></h4>
+    </div>
+</div>
+
 {% include 'components/question-item.html' %}
 
 {% for answer in answers %}
