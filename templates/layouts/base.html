@@ -1,0 +1,136 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="{% static '/css/main.css'  %}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column h-100">
+
+<header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top ">
+        <div class="container-fluid">
+            <a class="navbar-brand brand-name" href="{% url 'index' %}">A W</a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="mx-auto navbar-nav mb-md-0">
+                    <li>
+                        <form class="d-flex me-auto">
+                            <input class="form-control me-2" type="search" placeholder="search on askwise"
+                                   aria-label="Search on AskWise">
+                            <button class="btn btn-outline-primary btn-search" type="submit">search</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'ask' %}">
+                            <button class="btn btn-outline-primary btn-nav-ask" type="button">
+                                ask
+                            </button>
+                        </a>
+
+                    </li>
+                </ul>
+                <div class="block-user">
+                    <!--Authorised-->
+                    <ul class="navbar-nav  mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <img src="{% static '/img/avatar.jpg' %}" alt="" onerror="this.style.display='none';"
+                                 class="profile-avatar">
+                        </li>
+                        <li class="nav-item">
+                            <p class="user-name">user name</p>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'settings' %}">settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">log out</a>
+                        </li>
+                    </ul>
+                    <!--Unauthorised-->
+                    <!--<ul class="navbar-nav  mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'signup' %}">register</a>
+                        </li>
+                    </ul>-->
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+
+                {% block content %}
+                hey it's empty block
+                {% endblock %}
+
+            </div>
+            <div class="col-4">
+                <h1>popular tags</h1>
+                <div class="popular-tags">
+
+
+                    {% for tag in tags %}
+                    <a href="{% url 'tag' tag_name=tag.name %}" class="badge rounded-pill {{ tag.color }} popular-tag">
+                        {{ tag.name }}</a>
+                    {% endfor %}
+
+
+                </div>
+                <div class="best-members-title">
+                    <h1>best members</h1></div>
+                <div class="best-members">
+                    <h5 class="best-member">First member <span class="badge bg-secondary"></span>
+                    </h5>
+                    <h5 class="best-member">Second <span class="badge bg-secondary"></span>
+                    </h5>
+                    <h5 class="best-member">Third <span class="badge bg-secondary"></span></h5>
+                    <h5 class="best-member">Fourth<span class="badge bg-secondary"></span></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <span class="text-muted">AksWise 2023</span>
+    </div>
+</footer>
+
+<script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

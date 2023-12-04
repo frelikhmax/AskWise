@@ -1,0 +1,24 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+{% include 'components/question-item.html' %}
+
+{% for answer in answers %}
+
+{% include 'components/answer-item.html' %}
+
+{% endfor %}
+
+<div class="mb-3 ">
+    <label for="exampleFormControlTextarea1"></label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="your answer (max 300)"
+              maxlength="300"></textarea>
+</div>
+<div class="btn-answer" >
+    <button type="button" class="btn btn-primary btn-lg">answer</button>
+</div>
+
+{% include "components/pagination-item.html" %}
+
+{% endblock %}

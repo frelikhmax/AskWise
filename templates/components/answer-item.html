@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="row answer">
+    <div class="col-2">
+        <img src="{% static '/img/avatar.jpg' %}" alt="picture hasn't been uploaded"
+             class="answer-avatar">
+        <div class="btn-group-vertical answer-rating" role="group">
+            <button type="button" class="btn btn-outline-primary">like
+            </button>
+            <button type="button" class="btn btn-outline-danger">dislike
+            </button>
+            <p class="rating-counter">{{answer.rating_counter}}</p>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="answer-text">{{ answer.content }}</div>
+        <div class="form-check is-correct-answer">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+            <label class="form-check-label" for="flexCheckDefault1">
+                correct
+            </label>
+        </div>
+    </div>
+</div>

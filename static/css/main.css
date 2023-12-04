@@ -1,0 +1,251 @@
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+main > .container {
+    padding: 60px 15px 0;
+    color: #E6EDF3;
+}
+
+main {
+    background-color: #050505;
+    min-height: 947px;
+
+}
+
+.navbar {
+    background-color: #050505;
+    border-bottom: 2px solid #30363D;
+}
+
+.navbar * {
+
+    color: #E6EDF3;
+}
+
+
+.brand-name {
+    padding: 0 50px 0 100px;
+    margin-right: 50px;
+    font-family: serif;
+    font-weight: 590;
+}
+
+.btn-search {
+    border: 1px solid #7D8590;
+    padding-inline: 5px;
+}
+
+.btn-nav-ask {
+    margin-left: 20px;
+    padding-inline: 20px;
+    background-color: #0a53be;
+    font-weight: bolder;
+}
+
+.profile-avatar {
+    max-width: 40px;
+    margin-inline: 10px;
+
+}
+
+.user-name {
+    padding: 8px 8px 0 8px;
+    margin: 0;
+}
+
+.hot-questions-title {
+    margin-top: 20px;
+}
+
+h4.hot-questions-title a {
+
+    color: #E6EDF3;
+}
+
+.question {
+    border: 2px solid #30363D;
+    margin: 30px 0 30px 0;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #181818;
+}
+
+.question-avatar {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.question-title {
+    font-size: 26px;
+    font-family: Helvetica, serif;
+    font-weight: bold;
+}
+
+.question-title a {
+    color: #E6EDF3;
+}
+
+.question-text {
+    font-size: 18px;
+    font-family: Helvetica, serif;
+}
+
+.question-rating {
+    margin-top: 100px;
+}
+
+.rating-counter {
+    text-align: center;
+    width: 100%;
+}
+
+.answers-and-tag {
+    margin-top: 30px;
+}
+
+.answers a {
+    color: #E6EDF3;
+
+}
+
+.tag {
+    margin: 0 7px 0 7px;
+}
+
+.tag a {
+    color: #E6EDF3;
+}
+
+.popular-tags {
+    margin: 50px 0 50px 50px;
+}
+
+.popular-tag {
+    padding: 15px 30px 15px 30px;
+    margin: 10px;
+}
+
+.best-members {
+    margin: 50px;
+}
+
+.best-members-title {
+    margin-top: 100px;
+}
+
+.best-member {
+    margin: 30px 0 30px 0;
+}
+
+h5.best-member a {
+    text-decoration: none;
+    color: #E6EDF3;
+}
+
+.btn-toolbar {
+    margin: 20px;
+}
+
+.answer {
+    border: 2px solid #30363D;
+    margin: 15px 100px 15px 0;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #181818;
+}
+
+.answer-avatar {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.answer-rating {
+    margin-top: 30px;
+}
+
+.answer-text {
+    font-size: 16px;
+    font-family: Helvetica, serif;
+}
+
+.is-correct-answer {
+    margin-top: 10px;
+}
+
+.your-answer {
+    margin-top: 30px;
+}
+
+.title-block {
+    margin-top: 30px;
+}
+
+.text-block {
+    margin-top: 30px;
+}
+
+.tags-block {
+    margin-top: 30px;
+}
+
+.ask-btn {
+    margin: 20px 0 20px 0;
+}
+
+.alert-ask-question {
+    margin-top: 30px;
+}
+
+.label-wrong-password {
+    margin: 130px 0 20px 0;
+    height: 24px;
+    text-align: center;
+    color: red;
+}
+
+.label-wrong-password p {
+    margin: 0;
+}
+
+.authorisation-element {
+    margin: 30px 200px 30px 200px;
+}
+
+.btn-login {
+    margin-left: 200px;
+
+}
+
+.block-register {
+    margin-top: 20px;
+}
+
+.register {
+    margin-left: 200px;
+}
+
+.register a {
+    color: #E6EDF3;
+}
+
+.label-used-email {
+    margin: 80px 0 20px 0;
+    height: 24px;
+    text-align: center;
+    color: red;
+}
+
+.label-used-email p {
+    margin: 0;
+}
+
+.settings-avatar {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 30px 200px 30px 200px;
+}
+
+.btn-answer {
+    margin-bottom: 20px;
+}

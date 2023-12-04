@@ -1,0 +1,34 @@
+{% load static %}
+
+<div class="row question">
+    <div class="col-2">
+        <img src="{% static '/img/avatar2.jpg'%}" alt="picture hasn't been uploaded"
+             class="question-avatar">
+        <div class="btn-group-vertical question-rating" role="group">
+            <button type="button" class="btn btn-outline-primary" id="likeButton1">like
+            </button>
+            <button type="button" class="btn btn-outline-danger" id="dislikeButton1">dislike
+            </button>
+            <p class="rating-counter">{{ question.rating_counter }}</p>
+        </div>
+    </div>
+
+    <div class="col-10">
+        <div class="question-title"><a href="{% url 'question' question_id=question.id %}">{{ question.title }}</a>
+        </div>
+        <div class="question-text">{{question.content}}</div>
+        <div class="row answers-and-tag">
+            <div class="col-4">
+                <span class="answers">answers (number)</span>
+            </div>
+            <div class="col-8">
+                <span class="tag">tags: </span>
+                {% for tag in question.tags %}
+                    <span class="tag"><a href="{% url 'tag' tag_name=tag %}">{{tag}}</a> </span>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+</div>

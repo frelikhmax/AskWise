@@ -1,0 +1,34 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<h1>settings</h1>
+<div class="label-used-email">
+    <p>this email or login is already registered</p>
+</div>
+<div class="form-floating mb-3 authorisation-element">
+    <input type="email" class="form-control" id="floatingInput1" maxlength="60">
+    <label for="floatingInput1">vanya ivanov</label>
+</div>
+<div class="form-floating mb-3 authorisation-element">
+    <input type="email" class="form-control" id="floatingInput2" maxlength="60">
+    <label for="floatingInput2">vanyaivanov@gmail.com</label>
+</div>
+<div class="form-floating authorisation-element">
+    <input type="password" class="form-control" id="floatingPassword1" maxlength="60">
+    <label for="floatingPassword1">password</label>
+</div>
+<img src="{% static 'img/avatar.jpg' %}" alt="picture hasn't been uploaded"
+     class="settings-avatar">
+<div class="mb-3 authorisation-element">
+    <label for="formFile" class="form-label">upload avatar</label>
+    <input class="form-control" type="file" id="formFile">
+</div>
+<div class="btn-login">
+    <button type="button" class="btn btn-primary btn-lg">save</button>
+</div>
+
+{% endblock %}
