@@ -1,14 +1,25 @@
 {% extends 'layouts/base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
 
-<h1>registration</h1>
-<div class="label-used-email">
-    <p>this email or login is already registered</p>
+<h1>Sign up</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+{% endblock %}
+
+<!--<div class="label-used-email">
+    <p>this email or username is already registered</p>
 </div>
 <div class="form-floating mb-3 authorisation-element">
     <input type="email" class="form-control" id="floatingInput1" maxlength="60">
-    <label for="floatingInput1">login (max 60)</label>
+    <label for="floatingInput1">username (max 60)</label>
 </div>
 <div class="form-floating mb-3 authorisation-element">
     <input type="email" class="form-control" id="floatingInput2" maxlength="60">
@@ -28,6 +39,4 @@
 </div>
 <div class="btn-login">
     <button type="button" class="btn btn-primary btn-lg">register</button>
-</div>
-
-{% endblock %}
+</div>-->

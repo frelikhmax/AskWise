@@ -54,30 +54,34 @@
                 </ul>
                 <div class="block-user">
                     <!--Authorised-->
+                    {% if is_authenticated %}
                     <ul class="navbar-nav  mb-2 mb-md-0">
                         <li class="nav-item">
                             <img src="{% static '/img/avatar.jpg' %}" alt="" onerror="this.style.display='none';"
                                  class="profile-avatar">
                         </li>
                         <li class="nav-item">
-                            <p class="user-name">user name</p>
+                            <p class="user-name">{{ username }}</p>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'settings' %}">settings</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="">log out</a>
+                            <a class="nav-link" href="{% url 'logout' %}">log out</a>
                         </li>
                     </ul>
+                    {% else %}
                     <!--Unauthorised-->
-                    <!--<ul class="navbar-nav  mb-2 mb-md-0">
+                    <ul class="navbar-nav  mb-2 mb-md-0">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'login' %}">log in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'signup' %}">register</a>
+                            <a class="nav-link" href="{% url 'signup' %}">sign up</a>
                         </li>
-                    </ul>-->
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -99,23 +103,37 @@
                 <h1>popular tags</h1>
                 <div class="popular-tags">
 
-
-                    {% for tag in tags %}
-                    <a href="{% url 'tag' tag_name=tag.name %}" class="badge rounded-pill {{ tag.color }} popular-tag">
-                        {{ tag.name }}</a>
-                    {% endfor %}
-
+                    <a href="{% url 'tag' tag_name=popular_tags.0.name %}"
+                       class="badge rounded-pill text-bg-primary popular-tag">
+                        {{ popular_tags.0.name }}</a>
+                    <a href="{% url 'tag' tag_name=popular_tags.1.name %}"
+                       class="badge rounded-pill text-bg-secondary popular-tag">
+                        {{ popular_tags.1.name }}</a>
+                    <a href="{% url 'tag' tag_name=popular_tags.2.name %}"
+                       class="badge rounded-pill text-bg-success popular-tag">
+                        {{ popular_tags.2.name }}</a>
+                    <a href="{% url 'tag' tag_name=popular_tags.3.name %}"
+                       class="badge rounded-pill text-bg-danger popular-tag">
+                        {{ popular_tags.3.name }}</a>
+                    <a href="{% url 'tag' tag_name=popular_tags.4.name %}"
+                       class="badge rounded-pill text-bg-warning popular-tag">
+                        {{ popular_tags.4.name }}</a>
+                    <a href="{% url 'tag' tag_name=popular_tags.5.name %}"
+                       class="badge rounded-pill text-bg-info popular-tag">
+                        {{ popular_tags.5.name }}</a>
 
                 </div>
                 <div class="best-members-title">
                     <h1>best members</h1></div>
                 <div class="best-members">
-                    <h5 class="best-member">First member <span class="badge bg-secondary"></span>
+                    <h5 class="best-member">{{ best_members.0.user.username }} <span class="badge bg-secondary"></span>
                     </h5>
-                    <h5 class="best-member">Second <span class="badge bg-secondary"></span>
+                    <h5 class="best-member">{{ best_members.1.user.username }} <span class="badge bg-secondary"></span>
                     </h5>
-                    <h5 class="best-member">Third <span class="badge bg-secondary"></span></h5>
-                    <h5 class="best-member">Fourth<span class="badge bg-secondary"></span></h5>
+                    <h5 class="best-member">{{ best_members.2.user.username }} <span class="badge bg-secondary"></span>
+                    </h5>
+                    <h5 class="best-member">{{ best_members.3.user.username }}<span class="badge bg-secondary"></span>
+                    </h5>
                 </div>
             </div>
         </div>

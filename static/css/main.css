@@ -118,7 +118,7 @@ h4.hot-questions-title a {
 }
 
 .popular-tags {
-    margin: 50px 0 50px 50px;
+    margin: 50px 0 50px 30px;
 }
 
 .popular-tag {
@@ -200,7 +200,7 @@ h5.best-member a {
 .label-wrong-password {
     margin: 130px 0 20px 0;
     height: 24px;
-    text-align: center;
+    text-align: left;
     color: red;
 }
 
@@ -222,7 +222,7 @@ h5.best-member a {
 }
 
 .register {
-    margin-left: 200px;
+    margin-top: 20px;
 }
 
 .register a {
@@ -248,4 +248,8 @@ h5.best-member a {
 
 .btn-answer {
     margin-bottom: 20px;
+}
+
+.pagination-item {
+    margin-top: 30px;
 }
