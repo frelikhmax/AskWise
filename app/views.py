@@ -174,8 +174,9 @@ def tag(request, tag_name):
 
 @login_required(login_url='login', redirect_field_name='continue')
 @csrf_protect
-def like_question(request):
+def vote_question(request):
     id = request.POST.get('question_id')
+    vote_type = int(request.POST.get('vote_type', 0))
 
     question_with_rating = Question.objects.calculate_ratings_for_specific(id).first()
     profile = request.user.profile
@@ -187,22 +188,29 @@ def like_question(request):
     ).first()
 
     if existing_vote:
-
-        if existing_vote.vote_type == 1:
-            return JsonResponse({'message': 'Vote already exists', 'count': question_with_rating.rating})
+        existing_vote.delete()
+        if existing_vote.vote_type == vote_type:
+            question_with_rating.rating -= vote_type
+            return JsonResponse({'count': question_with_rating.rating})
         else:
-            existing_vote.delete()
+            question_with_rating.rating += vote_type
 
     vote = Vote(
-        vote_type=1,
+        vote_type=vote_type,
         profile=request.user.profile,
         content_type=ContentType.objects.get_for_model(Question),
         object_id=id
     )
     vote.save()
 
-    question_with_rating.rating += 1
+    question_with_rating.rating += vote_type
 
     count = question_with_rating.rating
 
     return JsonResponse({'count': count})
+
+
+@login_required(login_url='login', redirect_field_name='continue')
+@csrf_protect
+def like_answer(request):
+    pass

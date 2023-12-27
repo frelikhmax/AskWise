@@ -138,26 +138,3 @@ class SettingsForm(forms.ModelForm):
 
         return user
 
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     password = self.cleaned_data['password']
-    #     password_check = self.cleaned_data['password_check']
-    #
-    #     if password and password_check and password != password_check:
-    #         raise ValidationError("Passwords don't match")
-    #
-    #     return cleaned_data
-    #
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     user.set_password(self.cleaned_data['password'])  # Use set_password to hash the password
-    #     if commit:
-    #         user.save()
-    #
-    #     profile = Profile.objects.create(
-    #         user=user,
-    #         birth_date=self.cleaned_data['birth_date'],
-    #         registration_date=timezone.now()
-    #     )
-    #
-    #     return profile

@@ -4,16 +4,10 @@
     <div class="col-2">
         <img src="{% static '/img/avatar2.jpg'%}" alt="" onerror="this.style.display='none';"
              class="question-avatar">
-        <div class="btn-group-vertical question-rating" role="group">
-            <div class="like-section">
-                <button type="button" data-id="{{question.id}}"
-                        class="btn btn-outline-primary">like
-                </button>
-                <p class="rating-counter">{{question.rating}}</p>
-            </div>
-
-            <div class="dislike-section">
-                <button type="button" data-id="{{question.id}}" class="btn btn-outline-danger">dislike</button>
+        <div class="btn-group-vertical question-rating vote-section" role="group" data-url="{% url 'vote_question' %}">
+            <button type="button" data-id="{{question.id}}" class="btn btn-outline-primary">like</button>
+            <button type="button" data-id="{{question.id}}" class="btn btn-outline-danger">dislike</button>
+            <div>
                 <p class="rating-counter">{{question.rating}}</p>
 
             </div>
