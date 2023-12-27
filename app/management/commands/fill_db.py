@@ -26,7 +26,21 @@ class Command(BaseCommand):
         # self.fake_tags(ratio + 1)
         # self.fake_questions(ratio * 10 + 1)
         # self.fake_answers(ratio * 100 + 1)
-        self.fake_votes()
+        # self.fake_votes()
+        self.make_vote()
+
+    def make_vote(self):
+        profile=Profile.objects.get(pk=10017)
+        answer = Answer.objects.get(pk=2000048)
+        content_type = ContentType.objects.get_for_model(Answer)
+        vote = Vote(
+            vote_type=random.choice([-1, 1]),
+            profile=profile,
+            content_type=content_type,
+            object_id=answer.id
+        )
+        vote.save()
+
 
     def fake_profiles(self, ratio):
         profile_objects = []

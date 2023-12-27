@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
+from AskWise import settings
 from app import views
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -24,10 +28,13 @@ urlpatterns = [
     path('hot', views.hot, name='hot'),
     path('question/<int:question_id>', views.question, name='question'),
     path('login', views.log_in, name='login'),
-    path('logout/', views.log_out, name='logout'),
+    path('logout', views.log_out, name='logout'),
     path('settings', views.settings, name='settings'),
     path('signup', views.signup, name='signup'),
     path('tag/<str:tag_name>', views.tag, name='tag'),
+    path('like/', views.like_question, name='like_question'),
 
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

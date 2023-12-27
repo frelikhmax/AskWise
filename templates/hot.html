@@ -6,7 +6,11 @@
     <div class="col-7">
         <h1>hot questions</h1>
     </div>
+    <div class="col-5">
+        <h4 class="hot-questions-title"><a href="{% url 'index' %}">new questions</a></h4>
+    </div>
 </div>
+
 
 {% for question in questions %}
 

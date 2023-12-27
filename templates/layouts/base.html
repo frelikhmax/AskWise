@@ -54,14 +54,16 @@
                 </ul>
                 <div class="block-user">
                     <!--Authorised-->
-                    {% if is_authenticated %}
+                    {% if user.is_authenticated %}
                     <ul class="navbar-nav  mb-2 mb-md-0">
                         <li class="nav-item">
-                            <img src="{% static '/img/avatar.jpg' %}" alt="" onerror="this.style.display='none';"
+                            {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="" onerror="this.style.display='none';"
                                  class="profile-avatar">
+                            {% endif %}
                         </li>
                         <li class="nav-item">
-                            <p class="user-name">{{ username }}</p>
+                            <p class="user-name">{{ user.first_name }} {{ user.last_name }}</p>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'settings' %}">settings</a>
@@ -146,9 +148,7 @@
     </div>
 </footer>
 
-<script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+<script src="{% static '/js/main.js' %}"></script>
 
 </body>
 </html>

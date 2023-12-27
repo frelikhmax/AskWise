@@ -2,14 +2,17 @@
 
 <div class="row answer" id="{{answer.id}}">
     <div class="col-2">
-        <img src="{% static '/img/avatar.jpg' %}" alt="picture hasn't been uploaded"
+        <img src="{% static '/img/avatar.jpg' %}" alt="" onerror="this.style.display='none';"
              class="answer-avatar">
         <div class="btn-group-vertical answer-rating" role="group">
-            <button type="button" class="btn btn-outline-primary">like
-            </button>
-            <button type="button" class="btn btn-outline-danger">dislike
-            </button>
-            <p class="rating-counter">{{answer.rating_counter}}</p>
+            <div>
+                <button type="button" class="btn btn-outline-primary">like</button>
+                <p class="rating-counter">{{answer.rating}}</p>
+
+            </div>
+            <div>
+                <button type="button" class="btn btn-outline-danger">dislike</button>
+            </div>
         </div>
     </div>
     <div class="col-10">

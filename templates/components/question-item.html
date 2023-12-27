@@ -2,14 +2,22 @@
 
 <div class="row question">
     <div class="col-2">
-        <img src="{% static '/img/avatar2.jpg'%}" alt="picture hasn't been uploaded"
+        <img src="{% static '/img/avatar2.jpg'%}" alt="" onerror="this.style.display='none';"
              class="question-avatar">
         <div class="btn-group-vertical question-rating" role="group">
-            <button type="button" class="btn btn-outline-primary" id="likeButton1">like
-            </button>
-            <button type="button" class="btn btn-outline-danger" id="dislikeButton1">dislike
-            </button>
-            <p class="rating-counter">{{ question.rating_counter }}</p>
+            <div class="like-section">
+                <button type="button" data-id="{{question.id}}"
+                        class="btn btn-outline-primary">like
+                </button>
+                <p class="rating-counter">{{question.rating}}</p>
+            </div>
+
+            <div class="dislike-section">
+                <button type="button" data-id="{{question.id}}" class="btn btn-outline-danger">dislike</button>
+                <p class="rating-counter">{{question.rating}}</p>
+
+            </div>
+
         </div>
     </div>
 
@@ -24,7 +32,7 @@
             <div class="col-8">
                 <span class="tag">tags: </span>
                 {% for tag in question.tags.all %}
-                    <span class="tag"><a href="{% url 'tag' tag_name=tag %}">{{tag}}</a> </span>
+                <span class="tag"><a href="{% url 'tag' tag_name=tag %}">{{tag}}</a> </span>
                 {% endfor %}
             </div>
 

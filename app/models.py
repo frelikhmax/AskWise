@@ -28,8 +28,23 @@ class UpvoteManager(models.Manager):
         rating = self.get_queryset().filter(vote__gt=0).count() - self.get_queryset().filter(vote__lt=0).count()
         return rating
 
+    def create_vote(self, vote_type, profile, content_type, object_id):
+        return self.create(vote_type=vote_type, profile=profile, content_type=content_type,
+                           object_id=object_id)
+
 
 class QuestionManager(models.Manager):
+
+    def calculate_ratings_for_specific(self, questions_ids):
+        if not isinstance(questions_ids, (list, tuple)):
+            questions_ids = [questions_ids]
+
+        questions = self.filter(pk__in=questions_ids).annotate(
+            rating=Coalesce(Sum('votes__vote_type'), 0)
+
+        )
+        return questions
+
     def calculate_rating(self):
         questions = Question.objects.annotate(
             rating=Coalesce(Sum('votes__vote_type'), 0)
@@ -37,7 +52,8 @@ class QuestionManager(models.Manager):
         return questions
 
     def new(self):
-        return self.order_by('-publication_date')
+        questions = self.calculate_rating()
+        return questions.order_by('-publication_date')
 
     def hot(self):
         questions = self.calculate_rating()
@@ -48,8 +64,24 @@ class QuestionManager(models.Manager):
         return questions
 
 
-
 class AnswerManager(models.Manager):
+
+    def calculate_ratings_for_specific(self, answers_ids):
+        if not isinstance(answers_ids, (list, tuple)):
+            answers_ids = [answers_ids]
+
+        answers = self.filter(pk__in=answers_ids).annotate(
+            rating=Coalesce(Sum('votes__vote_type'), 0)
+
+        )
+        return answers
+
+    def calculate_ratings_for_question(self, question):
+        answers = Answer.objects.filter(question=question).annotate(
+            rating=Coalesce(Sum('votes__vote_type'), 0)
+        )
+        return answers
+
     def calculate_rating(self):
         answers = Answer.objects.annotate(
             rating=Coalesce(Sum('votes__vote_type'), 0)
@@ -89,7 +121,8 @@ class Vote(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    # objects = UpvoteManager()
+
+    objects = UpvoteManager()
 
 
 class Question(models.Model):
@@ -129,6 +162,7 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
+    avatar = models.ImageField(null=True, blank=True, default='avatar.jpg', upload_to='avatar/%Y/%m/%d')
     registration_date = models.DateField(null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='profile')

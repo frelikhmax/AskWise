@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.forms import ImageField
 from django.utils import timezone
 
 from app.models import Profile, Question, Tag, Answer
@@ -23,7 +24,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -71,20 +72,13 @@ class AskForm(forms.ModelForm):
 
     def save(self, commit=True):
         question = super().save(commit=False)
-
-        # Set the profile to the current user's profile
         question.profile = Profile.objects.get(user=self.request.user)
-
-        # Set the publication_date to the current date and time
         question.publication_date = timezone.now()
-
-        # Set the tags
         tags = self.clean_tags()
         tag_objects = []
         for tag_name in tags:
             tag, created = Tag.objects.get_or_create(name=tag_name)
             tag_objects.append(tag)
-
         if commit:
             question.save()
 
@@ -106,15 +100,64 @@ class AnswerForm(forms.ModelForm):
 
     def save(self, commit=True):
         answer = super().save(commit=False)
-
-        # Set the profile to the current user's profile
         answer.profile = Profile.objects.get(user=self.request.user)
         answer.question = self.question
-
-        # Set the publication_date to the current date and time
         answer.publication_date = timezone.now()
-
         if commit:
             answer.save()
-
         return answer
+
+
+class SettingsForm(forms.ModelForm):
+    avatar = ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get('first_name')
+        last_name = cleaned_data.get('last_name')
+
+        if not first_name:
+            self.add_error('first_name', 'First name cannot be empty.')
+
+        if not last_name:
+            self.add_error('last_name', 'Last name cannot be empty.')
+
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+
+        profile = user.profile
+        received_avatar = self.cleaned_data.get('avatar')
+
+        if received_avatar:
+            profile.avatar = received_avatar
+            profile.save()
+
+        return user
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     password = self.cleaned_data['password']
+    #     password_check = self.cleaned_data['password_check']
+    #
+    #     if password and password_check and password != password_check:
+    #         raise ValidationError("Passwords don't match")
+    #
+    #     return cleaned_data
+    #
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     user.set_password(self.cleaned_data['password'])  # Use set_password to hash the password
+    #     if commit:
+    #         user.save()
+    #
+    #     profile = Profile.objects.create(
+    #         user=user,
+    #         birth_date=self.cleaned_data['birth_date'],
+    #         registration_date=timezone.now()
+    #     )
+    #
+    #     return profile

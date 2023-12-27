@@ -1,11 +1,14 @@
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
+from django.forms import model_to_dict
+from django.http import JsonResponse
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
-from app.forms import LoginForm, RegisterForm, AskForm, AnswerForm
-from app.models import Tag, Profile, Question, Answer
+from app.forms import LoginForm, RegisterForm, AskForm, AnswerForm, SettingsForm
+from app.models import Tag, Profile, Question, Answer, Vote
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
@@ -29,14 +32,16 @@ def paginate(objects, request, per_page=5):
 # Create your views here.
 
 def index(request):
-    params, page, pages_number = paginate(Question.objects.new(), request, 4)
+    questions, page, pages_number = paginate(Question.objects.new(), request, 4)
+
     return render(request, 'index.html',
-                  {'questions': params, 'page': page, 'prev': page - 1, 'fol': page + 1, 'pages_number': pages_number,
-                   'popular_tags': Tag.objects.hot()[:6], 'best_members': Profile.objects.best()[:4],
-                   'is_authenticated': request.user.is_authenticated, 'username': request.user.username})
+                  {'questions': questions, 'page': page, 'prev': page - 1, 'fol': page + 1,
+                   'pages_number': pages_number,
+                   'popular_tags': Tag.objects.hot()[:6], 'best_members': Profile.objects.best()[:4]})
 
 
 @login_required(login_url='login', redirect_field_name='continue')
+@csrf_protect
 def ask(request):
     if request.method == 'GET':
         ask_form = AskForm()
@@ -49,17 +54,14 @@ def ask(request):
             else:
                 ask_form.add_error(field=None, error="Question saving error")
     return render(request, 'ask.html', {'form': ask_form, 'popular_tags': Tag.objects.hot()[:6],
-                                        'best_members': Profile.objects.best()[:4],
-                                        'is_authenticated': request.user.is_authenticated,
-                                        'username': request.user.username})
+                                        'best_members': Profile.objects.best()[:4]})
 
 
 def hot(request):
     params, page, pages_number = paginate(Question.objects.hot(), request, 4)
     return render(request, 'hot.html',
                   {'questions': params, 'page': page, 'prev': page - 1, 'fol': page + 1, 'pages_number': pages_number,
-                   'popular_tags': Tag.objects.hot()[:6], 'best_members': Profile.objects.best()[:4],
-                   'is_authenticated': request.user.is_authenticated, 'username': request.user.username})
+                   'popular_tags': Tag.objects.hot()[:6], 'best_members': Profile.objects.best()[:4]})
 
 
 @csrf_protect
@@ -78,9 +80,7 @@ def log_in(request):
             else:
                 login_form.add_error(None, "Wrong username or password")
     return render(request, 'log_in.html', context={'form': login_form, 'popular_tags': Tag.objects.hot()[:6],
-                                                   'best_members': Profile.objects.best()[:4],
-                                                   'is_authenticated': request.user.is_authenticated,
-                                                   'username': request.user.username})
+                                                   'best_members': Profile.objects.best()[:4]})
 
 
 @login_required(login_url='login', redirect_field_name='continue')
@@ -114,23 +114,37 @@ def question(request, question_id):
         else:
             answer_form.add_error(field=None, error="Answer saving error")
 
-    params, page, pages_number = paginate(Answer.objects.question(item), request, 5)
+    answers = Answer.objects.calculate_ratings_for_question(item)
+
+    answers, page, pages_number = paginate(answers, request, 5)
+
+    question_with_rating = Question.objects.calculate_ratings_for_specific(question_id).first()
 
     return render(request, 'question.html',
-                  {'question': item, 'answers': params, 'page': page, 'prev': page - 1, 'fol': page + 1,
+                  {'question': question_with_rating, 'answers': answers, 'page': page, 'prev': page - 1,
+                   'fol': page + 1,
                    'pages_number': pages_number, 'form': answer_form, 'popular_tags': Tag.objects.hot()[:6],
-                   'best_members': Profile.objects.best()[:4],
-                   'is_authenticated': request.user.is_authenticated,
-                   'username': request.user.username})
+                   'best_members': Profile.objects.best()[:4]})
 
 
 @login_required(login_url='login', redirect_field_name='continue')
+@csrf_protect
 def settings(request):
-    return render(request, 'settings.html',
-                  {'popular_tags': Tag.objects.hot()[:6], 'best_members': Profile.objects.best()[:4],
-                   'is_authenticated': request.user.is_authenticated, 'username': request.user.username})
+    if request.method == 'GET':
+        form = SettingsForm(initial=model_to_dict(request.user))
+
+    elif request.method == 'POST':
+        form = SettingsForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+
+    else:
+        form = SettingsForm()
+    return render(request, 'settings.html', context={'form': form, 'popular_tags': Tag.objects.hot()[:6],
+                                                     'best_members': Profile.objects.best()[:4]})
 
 
+@csrf_protect
 def signup(request):
     if request.user.is_authenticated:
         log_out(request)
@@ -147,9 +161,7 @@ def signup(request):
             else:
                 profile_form.add_error(field=None, error="Profile saving error")
     return render(request, 'signup.html', context={'form': profile_form, 'popular_tags': Tag.objects.hot()[:6],
-                                                   'best_members': Profile.objects.best()[:4],
-                                                   'is_authenticated': request.user.is_authenticated,
-                                                   'username': request.user.username})
+                                                   'best_members': Profile.objects.best()[:4]})
 
 
 def tag(request, tag_name):
@@ -157,5 +169,40 @@ def tag(request, tag_name):
     return render(request, 'tag.html',
                   {'tag_name': tag_name, 'questions': params, 'page': page, 'prev': page - 1, 'fol': page + 1,
                    'pages_number': pages_number, 'popular_tags': Tag.objects.hot()[:6],
-                   'best_members': Profile.objects.best()[:4], 'is_authenticated': request.user.is_authenticated,
-                   'username': request.user.username})
+                   'best_members': Profile.objects.best()[:4]})
+
+
+@login_required(login_url='login', redirect_field_name='continue')
+@csrf_protect
+def like_question(request):
+    id = request.POST.get('question_id')
+
+    question_with_rating = Question.objects.calculate_ratings_for_specific(id).first()
+    profile = request.user.profile
+
+    existing_vote = Vote.objects.filter(
+        profile=profile,
+        content_type=ContentType.objects.get_for_model(Question),
+        object_id=id
+    ).first()
+
+    if existing_vote:
+
+        if existing_vote.vote_type == 1:
+            return JsonResponse({'message': 'Vote already exists', 'count': question_with_rating.rating})
+        else:
+            existing_vote.delete()
+
+    vote = Vote(
+        vote_type=1,
+        profile=request.user.profile,
+        content_type=ContentType.objects.get_for_model(Question),
+        object_id=id
+    )
+    vote.save()
+
+    question_with_rating.rating += 1
+
+    count = question_with_rating.rating
+
+    return JsonResponse({'count': count})
